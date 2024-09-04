@@ -1,0 +1,31 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: auth-server
+
+  # .env import
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create # 서버 실행 시 DB의 모든 테이블 삭제 후 재생성
+      naming:
+        use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: true
+        format_sql: true
+      dialect: org.hibernate.dialect.MariaDBDialect
+    defer-datasource-initialization: true # (2.5~) Hibernate 초기화 이후 data.sql 실행
