@@ -1,4 +1,4 @@
-package wantedgold.resourceserver.domain.product.enums;
+package wantedgold.resourceserver.domain.order.enums;
 
 import lombok.Getter;
 
