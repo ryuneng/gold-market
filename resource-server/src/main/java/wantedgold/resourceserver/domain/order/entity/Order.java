@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import wantedgold.resourceserver.domain.product.entity.Product;
-import wantedgold.resourceserver.domain.product.enums.Status;
+import wantedgold.resourceserver.domain.order.enums.Status;
 import wantedgold.resourceserver.global.entity.BaseEntity;
 
 import java.math.BigDecimal;
