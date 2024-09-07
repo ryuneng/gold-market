@@ -1,4 +1,4 @@
-package wantedgold.resourceserver.domain.product.entity;
+package com.ryuneng.goldresource.domain.product.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-import wantedgold.resourceserver.domain.product.enums.Name;
-import wantedgold.resourceserver.domain.product.enums.Type;
-import wantedgold.resourceserver.global.entity.BaseEntity;
+import com.ryuneng.goldresource.domain.product.enums.Name;
+import com.ryuneng.goldresource.domain.product.enums.Type;
+import com.ryuneng.goldresource.global.entity.BaseEntity;
 
 @Entity
 @Getter

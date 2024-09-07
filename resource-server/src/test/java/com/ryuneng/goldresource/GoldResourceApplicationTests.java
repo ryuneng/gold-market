@@ -1,10 +1,10 @@
-package wantedgold.resourceserver;
+package com.ryuneng.goldresource;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ResourceServerApplicationTests {
+class GoldResourceApplicationTests {
 
     @Test
     void contextLoads() {

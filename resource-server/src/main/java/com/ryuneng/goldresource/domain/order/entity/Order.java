@@ -1,4 +1,4 @@
-package wantedgold.resourceserver.domain.order.entity;
+package com.ryuneng.goldresource.domain.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,9 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
-import wantedgold.resourceserver.domain.product.entity.Product;
-import wantedgold.resourceserver.domain.order.enums.Status;
-import wantedgold.resourceserver.global.entity.BaseEntity;
+import com.ryuneng.goldresource.domain.order.enums.Status;
+import com.ryuneng.goldresource.domain.product.entity.Product;
+import com.ryuneng.goldresource.global.entity.BaseEntity;
 
 import java.math.BigDecimal;
 

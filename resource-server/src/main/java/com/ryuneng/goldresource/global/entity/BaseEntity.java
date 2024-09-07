@@ -1,4 +1,4 @@
-package wantedgold.resourceserver.global.entity;
+package com.ryuneng.goldresource.global.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
