@@ -1,4 +1,4 @@
-package wantedgold.authserver.global.config;
+package com.ryuneng.goldauth.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

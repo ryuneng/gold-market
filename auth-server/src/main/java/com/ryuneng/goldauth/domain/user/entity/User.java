@@ -1,12 +1,12 @@
-package wantedgold.authserver.domain.user.entity;
+package com.ryuneng.goldauth.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import wantedgold.authserver.domain.user.enums.Role;
-import wantedgold.authserver.global.entity.BaseEntity;
+import com.ryuneng.goldauth.domain.user.enums.Role;
+import com.ryuneng.goldauth.global.entity.BaseEntity;
 
 @Entity
 @Getter

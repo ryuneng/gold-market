@@ -1,4 +1,4 @@
-package wantedgold.authserver.domain.user.enums;
+package com.ryuneng.goldauth.domain.user.enums;
 
 import lombok.Getter;
 

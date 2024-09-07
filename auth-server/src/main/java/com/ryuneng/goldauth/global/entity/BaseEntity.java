@@ -1,4 +1,4 @@
-package wantedgold.authserver.global.entity;
+package com.ryuneng.goldauth.global.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
