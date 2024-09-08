@@ -6,6 +6,8 @@ import com.ryuneng.goldauth.domain.user.service.UserService;
 import com.ryuneng.goldauth.global.exception.response.SuccessResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,9 +18,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping()
-    public SuccessResponse<UserCreateResponse> signup(@Valid @RequestBody UserCreateRequest request) {
+    public ResponseEntity<SuccessResponse<UserCreateResponse>> signup(@Valid @RequestBody UserCreateRequest request) {
 
-        return SuccessResponse.created("회원가입이 완료되었습니다.", userService.signup(request));
+        SuccessResponse<UserCreateResponse> response = SuccessResponse.ok("회원가입이 완료되었습니다.", userService.signup(request));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }
