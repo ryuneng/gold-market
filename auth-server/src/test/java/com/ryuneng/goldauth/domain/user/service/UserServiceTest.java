@@ -45,13 +45,13 @@ class UserServiceTest {
 
         // then
         assertThat(response)
-                .extracting("username")
-                .isEqualTo(response.getUsername());
+                .extracting("email")
+                .isEqualTo(response.getEmail());
     }
 
-    @DisplayName("이미 존재하는 아이디로 회원가입을 시도한다.")
+    @DisplayName("이미 존재하는 이메일로 회원가입을 시도한다.")
     @Test
-    void signupWithDuplicationUsername() {
+    void signupWithDuplicationEmail() {
         // given
         UserCreateRequest request = createUserCreateRequestBuilder();
 
@@ -61,15 +61,16 @@ class UserServiceTest {
         // then
         assertThatThrownBy(() -> userService.signup(request))
                 .isInstanceOf(CustomException.class)
-                .hasMessage(ErrorCode.USERNAME_DUPLICATION.getMessage());
+                .hasMessage(ErrorCode.EMAIL_DUPLICATION.getMessage());
     }
 
     // 유저 Request DTO 빌더 생성
     private UserCreateRequest createUserCreateRequestBuilder() {
 
         return UserCreateRequest.builder()
-                .username("user1")
+                .email("test@test.com")
                 .password(passwordEncoder.encode("test1234"))
+                .nickname("테스트유저")
                 .phoneNumber("01012345678")
                 .build();
     }

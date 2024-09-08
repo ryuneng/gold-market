@@ -1,18 +1,18 @@
 package com.ryuneng.goldauth.domain.user.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import com.ryuneng.goldauth.domain.user.enums.Role;
+import lombok.*;
 import com.ryuneng.goldauth.global.entity.BaseEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = "roleList")
 @Table(name = "user")
 public class User extends BaseEntity {
 
@@ -21,15 +21,19 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 16)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
+    private String nickname;
+
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @Enumerated(EnumType.STRING)
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
     @Column(nullable = false)
-    private Role role;
+    private List<Role> roleList = new ArrayList<>();
 }

@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-    USERNAME_DUPLICATION(HttpStatus.BAD_REQUEST, "이미 존재하는 아이디입니다.");
+    EMAIL_DUPLICATION(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

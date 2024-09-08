@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ryuneng.goldauth.global.exception.ErrorCode.USERNAME_DUPLICATION;
+import static com.ryuneng.goldauth.global.exception.ErrorCode.EMAIL_DUPLICATION;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +27,8 @@ public class UserService {
     @Transactional
     public UserCreateResponse signup(UserCreateRequest request) {
 
-        // 유저 아이디 중복 체크
-        usernameDuplicationCheck(request.getUsername());
+        // 유저 이메일 중복 체크
+        emailDuplicationCheck(request.getEmail());
 
         return new UserCreateResponse(userRepository.save(
                 request.createUser(passwordEncoder.encode(request.getPassword())) // 패스워드 암호화 및 유저 객체 생성
@@ -36,14 +36,14 @@ public class UserService {
     }
 
     /**
-     * 유저 아이디 중복 체크
+     * 유저 이메일 중복 체크
      * 
-     * @param username 유저 아이디
+     * @param email 유저 이메일
      */
-    private void usernameDuplicationCheck(String username) {
+    private void emailDuplicationCheck(String email) {
 
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new CustomException(USERNAME_DUPLICATION);
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new CustomException(EMAIL_DUPLICATION);
         }
     }
 
