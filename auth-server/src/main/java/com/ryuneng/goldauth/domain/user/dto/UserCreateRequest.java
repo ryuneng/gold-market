@@ -28,7 +28,7 @@ public class UserCreateRequest {
     private String password;
 
     @NotBlank(message = "전화번호를 입력해주세요.")
-    @Pattern(regexp = "^01[0-9]\\d{3,4}\\d{4}$", message = "하이픈(-)을 제외한 숫자만 입력해주세요. (예: 01012345678)")
+    @Pattern(regexp = "^01[0-9]\\d{3,4}\\d{4}$", message = "전화번호는 하이픈(-)을 제외한 숫자만 입력해주세요. (예: 01012345678)")
     @Size()
     private String phoneNumber;
 

@@ -12,7 +12,22 @@ services:
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mariadb-vl:/var/lib/mariadb
+  
+  # 테스트용
+  mariadb-test:
+    image: mariadb:latest
+    container_name: gold-auth-mariadb-test
+    ports:
+      - ${DB_TEST_PORT}:${DB_PORT}
+    restart: always
+    environment:
+      MARIADB_DATABASE: ${DB_NAME}_test
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mariadb-test-vl:/var/lib/mariadb
 
 volumes:
   mariadb-vl:
+    driver: local
+  mariadb-test-vl:
     driver: local
