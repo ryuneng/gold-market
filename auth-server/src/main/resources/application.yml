@@ -42,7 +42,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update # 서버 재실행 시 기존 DB 데이터 유지 (첫 실행 시에만 create 설정 필요)
+      ddl-auto: create # 서버 실행 시 DB의 모든 테이블 삭제 후 재생성
     show-sql: true
     properties:
       hibernate:
@@ -51,7 +51,7 @@ spring:
 
   sql:
     init:
-      mode: never # 서버 실행 시 data.sql 파일 항상 실행하지 않음 (첫 실행 시에만 always 설정 필요)
+      mode: always # 서버 실행 시 data.sql 파일 항상 실행
 
 # 3. 테스트 실행 전용 프로파일
 ---
