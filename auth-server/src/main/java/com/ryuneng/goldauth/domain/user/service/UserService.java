@@ -7,10 +7,14 @@ import com.ryuneng.goldauth.domain.user.dto.UserCreateResponse;
 import com.ryuneng.goldauth.domain.user.entity.User;
 import com.ryuneng.goldauth.domain.user.repository.UserRepository;
 import com.ryuneng.goldauth.global.exception.CustomException;
+import com.ryuneng.goldauth.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.ryuneng.goldauth.global.exception.ErrorCode.EMAIL_DUPLICATION;
 
@@ -46,17 +50,25 @@ public class UserService {
      * @return 로그인 후 생성된 JWT 토큰 문자열
      */
     @Transactional
-    public String login(LoginRequest request) {
+    public Map<String, String> login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        // JWT 토큰 생성
-        return tokenProvider.createToken(user.getEmail());
+        // JWT Access Token 및 Refresh Token 생성
+        String accessToken = tokenProvider.createToken(user.getEmail());
+        String refreshToken = tokenProvider.createRefreshToken(user.getEmail());
+
+        // 토큰을 Map으로 반환
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken);
+
+        return tokens;
     }
 
     /**

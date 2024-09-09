@@ -4,9 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -16,9 +18,14 @@ public class TokenProvider { // JWT 토큰 생성 및 검증 클래스
     private String jwtSecretKey;
 
     @Value("${JWT_EXPIRATION}")
-    private long jwtExpiration; // 1시간
+    private long jwtExpiration;        // 1시간
 
-    // JWT 토큰 생성
+    @Value("${JWT_REFRESH_EXPIRATION}")
+    private long jwtRefreshExpiration; // 7일
+
+    private final RedisTemplate<String, String> redisTemplate;
+
+    // JWT Access Token 생성
     public String createToken(String email) {
 
         return JWT.create()
@@ -36,7 +43,7 @@ public class TokenProvider { // JWT 토큰 생성 및 검증 클래스
                 .getSubject();
     }
 
-    // JWT 토큰 유효성 검증
+    // Access Token 유효성 검사
     public boolean validateToken(String token) {
 
         try {
@@ -45,6 +52,27 @@ public class TokenProvider { // JWT 토큰 생성 및 검증 클래스
         } catch (Exception e) {
             return false;
         }
+    }
+
+    // Refresh Token 생성 및 Redis 저장
+    public String createRefreshToken(String email) {
+
+        String refreshToken = JWT.create()
+                .withSubject(email)
+                .withExpiresAt(new Date(System.currentTimeMillis() + jwtRefreshExpiration))
+                .sign(generateAlgorithm(jwtSecretKey));
+
+        // Redis에 저장 (key: email, value: refreshToken)
+        redisTemplate.opsForValue().set(email, refreshToken, jwtRefreshExpiration, TimeUnit.MILLISECONDS);
+
+        return refreshToken;
+    }
+
+    // Refresh Token 유효성 검사
+    public boolean validateRefreshToken(String email, String refreshToken) {
+
+        String storedRefreshToken = redisTemplate.opsForValue().get(email);
+        return storedRefreshToken != null && storedRefreshToken.equals(refreshToken);
     }
 
     // HMAC256 형식의 알고리즘 생성
