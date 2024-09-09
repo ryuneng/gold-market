@@ -12,6 +12,12 @@ services:
       MARIADB_ROOT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - mariadb-vl:/var/lib/mariadb
+  redis:
+    image: redis:latest
+    container_name: gold-auth-redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    restart: always
   
   # 테스트용
   mariadb-test:

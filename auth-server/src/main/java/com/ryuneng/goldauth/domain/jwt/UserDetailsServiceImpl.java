@@ -4,7 +4,6 @@ import com.ryuneng.goldauth.domain.user.entity.Role;
 import com.ryuneng.goldauth.domain.user.entity.User;
 import com.ryuneng.goldauth.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService { // 사용자의 인증 정보를 로드하는 서비스
 
