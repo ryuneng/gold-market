@@ -1,7 +1,10 @@
 package com.ryuneng.goldauth.domain.user.service;
 
+import com.ryuneng.goldauth.domain.jwt.TokenProvider;
+import com.ryuneng.goldauth.domain.user.dto.LoginRequest;
 import com.ryuneng.goldauth.domain.user.dto.UserCreateRequest;
 import com.ryuneng.goldauth.domain.user.dto.UserCreateResponse;
+import com.ryuneng.goldauth.domain.user.entity.User;
 import com.ryuneng.goldauth.domain.user.repository.UserRepository;
 import com.ryuneng.goldauth.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ryuneng.goldauth.global.exception.ErrorCode.USERNAME_DUPLICATION;
+import static com.ryuneng.goldauth.global.exception.ErrorCode.EMAIL_DUPLICATION;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     /**
      * 유저 회원가입
@@ -27,8 +31,8 @@ public class UserService {
     @Transactional
     public UserCreateResponse signup(UserCreateRequest request) {
 
-        // 유저 아이디 중복 체크
-        usernameDuplicationCheck(request.getUsername());
+        // 유저 이메일 중복 체크
+        emailDuplicationCheck(request.getEmail());
 
         return new UserCreateResponse(userRepository.save(
                 request.createUser(passwordEncoder.encode(request.getPassword())) // 패스워드 암호화 및 유저 객체 생성
@@ -36,15 +40,33 @@ public class UserService {
     }
 
     /**
-     * 유저 아이디 중복 체크
-     * 
-     * @param username 유저 아이디
+     * 유저 로그인
+     *
+     * @param request 로그인할 유저 정보가 포함된 LoginRequest 객체
+     * @return 로그인 후 생성된 JWT 토큰 문자열
      */
-    private void usernameDuplicationCheck(String username) {
+    public String login(LoginRequest request) {
 
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new CustomException(USERNAME_DUPLICATION);
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다."));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다.");
         }
+
+        // JWT 토큰 생성
+        return tokenProvider.createToken(user.getEmail());
     }
 
+    /**
+     * 유저 이메일 중복 체크
+     * 
+     * @param email 유저 이메일
+     */
+    private void emailDuplicationCheck(String email) {
+
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new CustomException(EMAIL_DUPLICATION);
+        }
+    }
 }

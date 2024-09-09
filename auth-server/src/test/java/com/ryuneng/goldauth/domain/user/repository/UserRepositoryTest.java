@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static com.ryuneng.goldauth.domain.user.enums.Role.USER;
+import java.util.List;
+
+import static com.ryuneng.goldauth.domain.user.entity.Role.USER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -24,29 +25,29 @@ class UserRepositoryTest {
         userRepository.deleteAllInBatch();
     }
 
-    @DisplayName("유저 아이디로 유저를 조회한다.")
+    @DisplayName("이메일로 유저를 조회한다.")
     @Test
-    void findUserByUsername() {
+    void findUserByEmail() {
         // given
         User user = userRepository.save(createUserBuilder());
 
         // when
-        userRepository.findByUsername(user.getUsername());
+        userRepository.findByEmail(user.getEmail());
 
         // then
         assertThat(user)
-                .extracting("id", "username", "password", "phoneNumber", "role")
-                .contains(1L, "username", "user1234", "01012345678", USER);
+                .extracting("id", "email", "password", "nickname", "phoneNumber")
+                .contains(1L, "test@test.com", "user1234", "테스트유저", "01012345678");
     }
 
-    @DisplayName("존재하지 않는 유저 아이디로 유저를 조회한다.")
+    @DisplayName("존재하지 않는 이메일로 유저를 조회한다.")
     @Test
-    void findUserByWithNonExistentUsername() {
+    void findUserByWithNonExistentEmail() {
         // given
-        String username = "username";
+        String email = "test@test.com";
 
         // when // then
-        assertThat(userRepository.findByUsername(username)).isEmpty();
+        assertThat(userRepository.findByEmail(email)).isEmpty();
     }
 
     // 유저 빌더 생성
@@ -54,10 +55,11 @@ class UserRepositoryTest {
 
         return User.builder()
                 .id(1L)
-                .username("username")
+                .email("test@test.com")
                 .password("user1234")
+                .nickname("테스트유저")
                 .phoneNumber("01012345678")
-                .role(USER)
+                .roleList(List.of(USER))
                 .build();
     }
 

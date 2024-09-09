@@ -1,4 +1,4 @@
-package com.ryuneng.goldauth.domain.user.enums;
+package com.ryuneng.goldauth.domain.user.entity;
 
 import lombok.Getter;
 
@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum Role {
 
     ADMIN("관리자"),
+    MANAGER("매니저"),
     USER("사용자");
 
     private final String description;

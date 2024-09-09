@@ -13,11 +13,11 @@ import lombok.NoArgsConstructor;
 public class UserCreateResponse {
 
     private Long id;
-    private String username;
+    private String email;
 
     public UserCreateResponse(User user) {
         this.id = user.getId();
-        this.username = user.getUsername();
+        this.email = user.getEmail();
     }
 
 }
