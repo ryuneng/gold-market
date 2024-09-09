@@ -1,7 +1,10 @@
 package com.ryuneng.goldauth.domain.user.service;
 
+import com.ryuneng.goldauth.domain.jwt.TokenProvider;
+import com.ryuneng.goldauth.domain.user.dto.LoginRequest;
 import com.ryuneng.goldauth.domain.user.dto.UserCreateRequest;
 import com.ryuneng.goldauth.domain.user.dto.UserCreateResponse;
+import com.ryuneng.goldauth.domain.user.entity.User;
 import com.ryuneng.goldauth.domain.user.repository.UserRepository;
 import com.ryuneng.goldauth.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     /**
      * 유저 회원가입
@@ -36,6 +40,25 @@ public class UserService {
     }
 
     /**
+     * 유저 로그인
+     *
+     * @param request 로그인할 유저 정보가 포함된 LoginRequest 객체
+     * @return 로그인 후 생성된 JWT 토큰 문자열
+     */
+    public String login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다."));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다.");
+        }
+
+        // JWT 토큰 생성
+        return tokenProvider.createToken(user.getEmail());
+    }
+
+    /**
      * 유저 이메일 중복 체크
      * 
      * @param email 유저 이메일
@@ -46,5 +69,4 @@ public class UserService {
             throw new CustomException(EMAIL_DUPLICATION);
         }
     }
-
 }
