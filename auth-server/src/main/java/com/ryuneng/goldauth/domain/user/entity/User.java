@@ -33,6 +33,7 @@ public class User extends BaseEntity {
     private String phoneNumber;
 
     @ElementCollection(fetch = FetchType.LAZY)
+    @Enumerated(value = EnumType.STRING)
     @Builder.Default
     @Column(nullable = false)
     private List<Role> roleList = new ArrayList<>();

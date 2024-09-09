@@ -7,5 +7,5 @@ VALUES
 INSERT INTO user_role_list
     (role_list, user_id)
 VALUES
-    (0, 1),
-    (2, 2);
+    ('ADMIN', 1),
+    ('USER', 2);
