@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(value = EnumType.STRING)
     @Builder.Default
     @Column(nullable = false)

@@ -45,6 +45,7 @@ public class UserService {
      * @param request 로그인할 유저 정보가 포함된 LoginRequest 객체
      * @return 로그인 후 생성된 JWT 토큰 문자열
      */
+    @Transactional
     public String login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
