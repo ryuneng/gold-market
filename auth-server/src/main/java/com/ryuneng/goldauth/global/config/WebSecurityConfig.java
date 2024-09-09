@@ -36,6 +36,12 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션을 STATELESS 상태로 설정
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, ("/api/users/**")).permitAll() // 해당 경로 POST 요청은 인증 없이 허용
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",      // Swagger 3.0 관련 API 문서 경로
+                                "/swagger-resources/**" // Swagger 리소스 경로
+                        ).permitAll()
                         .anyRequest().authenticated());                                    // 이외의 모든 요청은 인증 필요
 
         // JWT 필터
