@@ -30,6 +30,6 @@ public abstract class BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "is_deleted", nullable = false, length = 1)
+    @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false; // 기본값 설정
 }

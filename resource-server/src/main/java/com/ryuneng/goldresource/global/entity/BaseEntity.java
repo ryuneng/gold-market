@@ -30,7 +30,7 @@ public abstract class BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(name = "deleted_yn", nullable = false, length = 1)
-    private String deletedYn = "N"; // 기본값 설정
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false; // 기본값 설정
 
 }

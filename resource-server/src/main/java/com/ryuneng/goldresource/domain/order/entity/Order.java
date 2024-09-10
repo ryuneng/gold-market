@@ -51,7 +51,6 @@ public class Order extends BaseEntity {
     @Comment("주문상태")
     private Status status;
 
-    @Column(nullable = false)
     @Comment("배송지")
     private String deliveryAddress;
 
