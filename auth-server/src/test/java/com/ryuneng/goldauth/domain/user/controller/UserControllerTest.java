@@ -1,6 +1,7 @@
 package com.ryuneng.goldauth.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ryuneng.goldauth.domain.jwt.TokenProvider;
 import com.ryuneng.goldauth.domain.user.dto.UserCreateRequest;
 import com.ryuneng.goldauth.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +30,9 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private TokenProvider tokenProvider;
 
     @DisplayName("신규 유저를 등록(회원가입)한다.")
     @Test
