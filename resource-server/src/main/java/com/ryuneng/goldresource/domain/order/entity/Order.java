@@ -53,4 +53,10 @@ public class Order extends BaseEntity {
 
     @Comment("배송지")
     private String deliveryAddress;
+    
+    // 주문번호 업데이트
+    public void updateOrderNumber(String orderNumber) {
+
+        this.orderNumber = orderNumber;
+    }
 }
