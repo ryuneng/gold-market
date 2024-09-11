@@ -1,15 +1,18 @@
 package com.ryuneng.goldresource.domain.order.service;
 
 import com.ryuneng.goldresource.domain.auth.UserResponse;
-import com.ryuneng.goldresource.domain.order.dto.OrderCreateRequest;
-import com.ryuneng.goldresource.domain.order.dto.OrderCreateResponse;
+import com.ryuneng.goldresource.domain.order.dto.*;
 import com.ryuneng.goldresource.domain.order.entity.Order;
 import com.ryuneng.goldresource.domain.order.enums.Status;
 import com.ryuneng.goldresource.domain.order.repository.OrderRepository;
 import com.ryuneng.goldresource.domain.product.entity.Product;
+import com.ryuneng.goldresource.domain.product.enums.Type;
 import com.ryuneng.goldresource.domain.product.repository.ProductRepository;
 import com.ryuneng.goldresource.global.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,9 +31,9 @@ public class OrderService {
     /**
      * 신규 주문 생성
      *
-     * @param user 검증된 사용자 정보가 포함된 UserResponse 객체
-     * @param request 생성할 주문 정보가 포함된 OrderCreateRequest 객체
-     * @return 생성된 신규 주문 정보가 포함된 OrderCreateResponse 객체
+     * @param user 검증된 사용자 정보
+     * @param request 생성할 주문 정보
+     * @return 생성된 신규 주문 정보
      */
     public OrderCreateResponse createOrder(UserResponse user, OrderCreateRequest request) {
 
@@ -86,5 +89,57 @@ public class OrderService {
                 .deliveryAddress(savedOrder.getDeliveryAddress())
                 .createdAt(savedOrder.getCreatedAt())
                 .build();
+    }
+
+    /**
+     * 주문 목록 조회
+     *
+     * @param user 검증된 사용자 정보
+     * @param request 페이지 요청 정보
+     * @return 페이징 처리된 주문 목록
+     */
+    public Page<OrderListResponse> getOrders(UserResponse user, OrderPageRequest request) {
+
+        // 시작일과 종료일을 LocalDateTime으로 변환
+        LocalDateTime startDateTime = request.getStartDate().atStartOfDay();
+        LocalDateTime endDateTime = request.getEndDate().atTime(23, 59, 59);
+
+        Pageable pageable = PageRequest.of(
+                request.getOffset() / request.getLimit(), // 페이지 번호 계산
+                request.getLimit() // 페이지 크기
+        );
+
+        Page<Order> orders;
+
+        // 상품 유형(구매/판매)에 따라 조회
+        if (request.getProductType() != null && !request.getProductType().isEmpty()) {
+            orders = orderRepository.findByProductTypePageable(
+                    user.email(),
+                    Type.valueOf(request.getProductType()), // 문자열을 Enum으로 변환
+                    startDateTime,
+                    endDateTime,
+                    pageable
+            );
+        } else {
+            orders = orderRepository.findByPageable(
+                    user.email(),
+                    startDateTime,
+                    endDateTime,
+                    pageable
+            );
+        }
+
+        // 주문 목록을 응답 DTO로 변환하여 반환
+        return orders.map(order -> OrderListResponse.builder()
+                .orderNumber(order.getOrderNumber())
+                .userEmail(order.getUserEmail())
+                .productName(order.getProduct().getName().getDescription())
+                .productType(order.getProduct().getType().getDescription())
+                .productPrice(order.getProduct().getPrice())
+                .quantity(order.getQuantity())
+                .totalPrice(order.getTotalPrice())
+                .status(order.getStatus().getDescription())
+                .createdAt(order.getCreatedAt())
+                .build());
     }
 }
