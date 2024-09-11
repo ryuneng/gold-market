@@ -1,103 +1,99 @@
-# 금방주식회사 백엔드 입사과제 
+# 🪙 GoldMarket
 
-## 🚀 도전 과제
-금을 한창 열심히 팔고 있던 알레테이아는, 금을 판매하고 구매하는 서비스를 제공하기로 결정했습니다!
-알레테이아는 앱을 통해 구매, 판매 주문을 관리하려고 합니다! 또한 미래에 서비스가 확장될 것을 고려하여,
-인증을 담당하는 서버를 별도로 구축하기로 결정했는데요, 
-과연 어떻게 해야 잘 만들 수 있을까요?
+> ## 📝 목차
+> 1. [서비스 소개](#-서비스-소개)
+> 2. [주요 기능](#주요-기능)
+> 3. [프로젝트 일정](#프로젝트-일정)
+> 4. [프로젝트 환경](#%EF%B8%8F-프로젝트-환경)
+> 6. [API 명세서](#-api-명세서)
+> 7. [ERD](#%EF%B8%8F-erd)
+> 8. [디렉토리 구조](#%EF%B8%8F-디렉토리-구조)
 
-## ✍️ 메인 과제 목표
+<br>
 
-1. RESTful API를 활용하여 구매, 판매 주문 CRUD를 수행하는 서버 A 구현
-2. 서버 A와 grpc를 통해 소통하며, 인증만을 담당하는 서버 B 구현
+## 🪙 서비스 소개
+- **금 거래 활성화 서비스** : 금의 판매와 구매를 지원하는 서비스를 제공하여 금 거래의 활성화를 촉진합니다.
 
-## 🔍 과제 상세 내용
+<br>
 
-##### 1. 구매, 판매 주문 CRUD 수행
-- 구매, 판매 시 품목은 두 가지: 99.9% 금과 99.99% 금
-- 수량 단위는 그램(g)이며, 최대 소수점 2번째 자리까지 처리 가능합니다. (request DTO 처리 시 유의 바랍니다)
-- (소비자 입장에서의) 구매 주문은 "주문 완료", "입금 완료", "발송 완료" 상태를 가지며,
-- (소비자 입장에서의) 판매 주문은 "주문 완료", "송금 완료", "수령 완료" 상태를 가집니다.
-- 각 주문에 대하여 주문번호, 주문일자, 주문자, 상태, 품목, 수량, 금액, 배송지 정보를 저장합니다.(추가적인 정보도 저장 가능합니다)
-- 주문번호는 자동으로 생성되며 Human Readable 해야합니다.
-- 주문일자는 현재 시간으로 설정합니다.
-- 주문의 상태 역시 특정 조건(API 호출)에 따라 바뀔 수 있어야 합니다.
+### 주요 기능
+> 1. 유저는 회원가입하고, 로그인할 수 있습니다.
+> 2. 상품 목록을 조회합니다.
+> 3. 주문을 생성합니다.
+> 4. 주문 목록을 조회합니다.
+> 5. 주문 상세를 조회합니다.
+> 6. 권한을 가진 사용자가 주문 상태를 변경합니다.
 
-##### 2. 인증 관리 CRUD 수행
-- 유저는 username, password를 가집니다.
-- 유저가 RESTful API를 통해 서버 B에게 토큰 요청 가능해야 합니다 (ID/PW를 사용한 인증 방식)
-- username과 password에는 정해진 format이 있어야 합니다.
-- refreshToken과 accessToken을 발급합니다.
+<br>
 
-##### 3. Pagination을 활용하는 API 구현
-- date, limit, offset, invoice type을 입력할 수 있으며, 다음과 같은 response를 제공해야 합니다:
-  ```json
-  {
-    "success": true,
-    "message": "Success to search invoices",
-    "data": [
-      {
-        // 구매 또는 판매 주문 detail
-      },
-      // ...
-    ],
-    "links": {
-      // pagination을 위한 추가적인 정보
-    }
-  }
-  ```
+## Quick Start
+### 1. 사전 준비 사항
+- Docker 및 Docker Composer가 설치되어 있어야 합니다. (버전 20.10 이상 권장)
 
-##### 4. 모든 response는 요청한 user의 권한에 맞는 invoice를 출력해야 합니다
-- 예: 유저 Alice가 생성한 invoice A를 유저 Bob이 SELECT 요청할 수 없습니다
+### 2. 데이터베이스 실행
+- 애플리케이션을 시작하기 전에 데이터베이스를 Docker Compose를 사용하여 설정해야 합니다.
+다음 명령어를 사용하여 각 서버의 데이터베이스를 실행합니다.
+```
+docker-compose -f ./auth-server/docker-compose.auth.yml up -d
+docker-compose -f ./resource-server/docker-compose.resource.yml up -d
+```
+위 명령어는 백그라운드에서 데이터베이스 컨테이너를 실행합니다.
+실행 중인 상태를 확인하려면 docker ps 명령어를 사용하세요.
 
-##### 5. 유저의 서버 A로의 모든 요청은 JWT를 사용하여 권한 확인이 가능해야 합니다 (요청 헤더에 필수적으로 Bearer Token 기입)
+### 3. Redis 패스워드 설정
+```
+1) docker exec -it [CONTAINER ID] redis-cli
+  (위 명령어가 실행되지 않을 경우, 아래 명령어를 실행해주세요.)
+  winpty docker exec -it [CONTAINER ID] redis-cli
 
-##### 6. 유저의 권한 확인이 필요한 경우, grpc를 통해 인증을 담당하는 서버 B에 JWT 토큰을 보내어 인증 여부를 확인해야 합니다.
+2) config get requirepass
+3) config set requirepass [PASSWORD]
+4) config get requirepass
+5) exit
+6) winpty docker exec -it [CONTAINER ID] redis-cli
+7) auth [PASSWORD]
+```
 
-##### 7. 에러 처리
-  1. 요청 실패 시 적절한 에러를 리턴해야 합니다.
-  2. 에러 응답 형식은 일관되게 유지해야 합니다.
+<br>
+<br>
 
-##### 8. 로그 작성
-  1. 에러 및 특이사항 발생 시 로그를 작성하여 대처할 수 있게 합니다.
+---
+### 프로젝트 일정
+- 2024.09.04 - 2024.09.11
 
-##### 9. 서버 A의 RESTful API 포트는 9999번, grpc 포트는 50052번에서 실행되어야 합니다.
+<br>
 
-##### 10. 서버 B의 RESTful API 포트는 8888번, grpc 포트는 50051번에서 실행되어야 합니다.
+### 🛠️ 프로젝트 환경
+| Stack                                                                                                        | Version           |
+|:------------------------------------------------------------------------------------------------------------:|:-----------------:|
+| ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) | Spring Boot 3.3.3 |
+| ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)    | Gradle 7.6       |
+| ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)    | JDK 17           |
+| ![MariaDB](https://img.shields.io/badge/mariadb-%2300A3E0.svg?style=for-the-badge&logo=mariadb&logoColor=white) | MariaDB 10.5.20 |
+| ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)    | Redis 7.0.11        |
+
+<br>
 
 
-## 🛠️ 필수 사용 기술
-- Golang
-- Gorm
-- GRPC
-- MariaDB
+<details>
+  <summary><b>🧾 API 명세서</b></summary><br>
+  🔗<a href="https://documenter.getpostman.com/view/33600354/2sAXqmB5nZ"> POSTMAN API 명세 링크 클릭</a>
+  <br>
+  <img src="https://github.com/user-attachments/assets/5fc22d1e-c91b-473e-8850-c24c4f5892c6" width="80%">
+</details>
 
-그 외 다른 라이브러리 사용 가능합니다.
+<details>
+  <summary><b>⛓️ ERD</b></summary><br>
+  <a href="https://dbdiagram.io/d/gold-market-66d7b203eef7e08f0e99f31f">🔗 dbdiagram 링크 클릭</a>
+  <h4>인증서버</h4>
+  <img src="https://github.com/user-attachments/assets/f7d7bfcf-d942-4ca3-b86a-e13e847690c3" width="40%">
+  <h4>자원서버</h4>
+  <img src="https://github.com/user-attachments/assets/4163cf35-35c6-4a72-abd0-d63e6826b92e" width="70%">
+</details>
 
-## 제출 방법
-1. 제출 방법은 작업하신 뒤 결과물을 자신의 레포에 업로드하여 메일로 url주소를 보내주시기 바랍니다.(이때 꼭 public으로 설정하여 접근하여 볼 수 있도록 해주시기 바랍니다)
-2. 직접 작성하신 README 파일을 작성하여 제출하시기 바랍니다.
 
-## 🔖 README에 포함될 내용은 다음과 같습니다:
-1. Quick Start (여기에 적힌 내용으로 서버 구동 실패 시 0점 처리이니 주의 바랍니다)
-2. [DB Diagram](https://dbdiagram.io)을 활용한 데이터 모델링이 필요합니다.
-3. API 스펙이 담긴 [Swagger](https://swagger.io)와 API 호출이 가능한 [Postman](https://www.postman.com)링크가 필요합니다.
-- Postman을 대신하여 간단하게 요청보내고, 출력을 확인하는 테스트코드 작성도 가능합니다.
+<details>
+  <summary><b>🗂️ 디렉토리 구조</b></summary><br>
+  - 직관적인 구조 파악과 관리를 위해 <b>도메인형 구조</b>를 채택하였습니다.
 
-## ⚠️ 참고 사항
-- 고루틴을 통한 동시성 프로그래밍 사용은 좋으나, 뮤텍스 혹은 채널을 사용하지 않아 동기화 처리가 되지 않으면 감점입니다.
-- 불필요한 동기화 처리 시도 시 감점입니다.
-- 오픈소스에 올라가면 안되는 내용(예: URL, 포트, JWT Secret 등)은 모두 .env 파일로 관리합니다.
-  - .env 내용은 과제 제출 메일로 첨부합니다.
-  - .env.example만 GitHub에 올립니다.
-- 구현하신 A,B서버에 작동하는 2개의 DB 모두 .sql 파일로 메일과 함께 제출합니다.
-- 현재 저장소는 과제 수행을 돕기 위한 템플릿이며, 필요에 따라 수정하시거나 사용하지 않으셔도 좋습니다.
-- 마지막으로, 제출물에 대한 피드백은 제공하지 않습니다.
-
-## 주의사항
-- 메일을 받은 다음날부터 7일간 과제 수행합니다. (예: 8월 8일 수신 -> 8월 15일 밤 12시 전 제출)
-- 마감 기한을 지키지 않을 시 0점 처리이니 꼭 과제 제출 기한을 지켜주세요.
-
-## 문의사항
-- 과제 수행 중 기술적인 부분의 문의는 일체 받지 않습니다.
-- 이외의 질문사항이 있을 경우 seoho@keumbang.com으로 문의 바랍니다.
+</details>
