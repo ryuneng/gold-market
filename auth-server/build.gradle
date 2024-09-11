@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.3'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.google.protobuf' version '0.9.4' // gRPC
 }
 
 group = 'com.ryuneng'
@@ -56,7 +57,53 @@ dependencies {
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+	// gRPC
+	implementation 'io.grpc:grpc-netty-shaded:1.66.0' // Netty Shaded 사용(gRPC 서버와 클라이언트의 Netty 전송 계층을 제공)
+	implementation 'io.grpc:grpc-protobuf:1.66.0'     // Protobuf 메시지와 gRPC의 통합을 지원
+	implementation 'io.grpc:grpc-stub:1.66.0'         // gRPC 클라이언트 스텁을 생성
+	// gRPC Protobuf 를 사용하기 위한 핵심 라이브러리 (Protobuf 메시지의 직렬화 및 역직렬화 지원)
+	implementation 'com.google.protobuf:protobuf-java:4.27.4'
+	implementation 'com.google.protobuf:protobuf-java-util:4.27.4'
+	implementation 'net.devh:grpc-spring-boot-starter:2.15.0.RELEASE' // Spring Boot와 gRPC의 통합을 간편하게 도와주는 스타터
+	compileOnly 'javax.annotation:javax.annotation-api:1.3.2' // gRPC 컴파일 시 javax 어노테이션 오류 발생 방지
 }
+
+// gRPC
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:4.27.4"
+	}
+	plugins {
+		grpc {
+			artifact = "io.grpc:protoc-gen-grpc-java:1.66.0"
+		}
+	}
+	generateProtoTasks {
+		all().each { task ->
+			task.plugins {
+				grpc {}
+			}
+		}
+	}
+}
+
+sourceSets {
+	main {
+		proto {
+			srcDir 'src/main/proto'
+		}
+	}
+}
+
+compileJava {
+	dependsOn 'generateProto'
+}
+
+tasks.processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 
 tasks.named('test') {
 	useJUnitPlatform()

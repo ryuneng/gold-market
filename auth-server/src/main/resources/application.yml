@@ -4,7 +4,7 @@ server:
 
 spring:
   profiles:
-    default: local # (로컬로 지정)
+    default: local # (프로파일 기본값 로컬로 지정)
 
   application:
     name: auth-server
@@ -37,7 +37,6 @@ spring:
     redis:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
-      timeout: 5000
       password: ${REDIS_PASSWORD}
 
 # 2. 로컬용 프로파일 (보통 배포 전 초기 개발 단계에 사용)
@@ -59,6 +58,12 @@ spring:
   sql:
     init:
       mode: always # 서버 실행 시 data.sql 파일 항상 실행
+
+grpc:
+  server:
+    port: ${GRPC_PORT}
+    security:
+      enabled: false
 
 # 3. 테스트 실행 전용 프로파일
 ---
