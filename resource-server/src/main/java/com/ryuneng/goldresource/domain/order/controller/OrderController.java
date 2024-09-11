@@ -53,6 +53,19 @@ public class OrderController {
         return SuccessResponse.ok("주문 목록 조회 성공", orderService.getOrders(user, request));
     }
 
+    @Operation(summary = "주문 상세 조회", description = "인증 서버를 통해 사용자 검증 후 주문 상세를 조회합니다.")
+    @GetMapping("/{orderId}")
+    public ResponseEntity<SuccessResponse<OrderResponse>> getOrderDetail(@RequestHeader("Authorization") String accessToken,
+                                                                        @PathVariable Long orderId) {
+
+        UserResponse user = validateUser(accessToken); // 사용자 검증
+
+        SuccessResponse<OrderResponse> response = SuccessResponse.ok(
+                "주문 상세 조회 성공", orderService.getOrderDetail(user, orderId));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     // 주어진 액세스 토큰을 통해 사용자 인증을 수행하는 메서드
     private UserResponse validateUser(String accessToken) {
 

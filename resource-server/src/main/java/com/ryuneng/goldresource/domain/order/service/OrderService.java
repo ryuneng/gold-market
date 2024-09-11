@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.ryuneng.goldresource.global.exception.ErrorCode.ORDER_NOT_FOUND;
 import static com.ryuneng.goldresource.global.exception.ErrorCode.PRODUCT_NOT_FOUND;
 
 @Service
@@ -141,5 +142,36 @@ public class OrderService {
                 .status(order.getStatus().getDescription())
                 .createdAt(order.getCreatedAt())
                 .build());
+    }
+
+    /**
+     * 주문 상세 조회
+     *
+     * @param user 검증된 사용자 정보
+     * @param orderId 주문 ID
+     * @return 주문 상세 정보
+     */
+    public OrderResponse getOrderDetail(UserResponse user, Long orderId) {
+
+        Order order = orderRepository.findByIdAndUserEmail(user.email(), orderId);
+
+        if (order == null) {
+            throw new CustomException(ORDER_NOT_FOUND);
+        }
+
+        return OrderResponse.builder()
+                .id(order.getId())
+                .orderNumber(order.getOrderNumber())
+                .userEmail(order.getUserEmail())
+                .productId(order.getProduct().getId())
+                .productName(order.getProduct().getName().getDescription())
+                .productType(order.getProduct().getType().getDescription())
+                .productPrice(order.getProduct().getPrice())
+                .quantity(order.getQuantity())
+                .totalPrice(order.getTotalPrice())
+                .status(order.getStatus().getDescription())
+                .deliveryAddress(order.getDeliveryAddress())
+                .createdAt(order.getCreatedAt())
+                .build();
     }
 }
