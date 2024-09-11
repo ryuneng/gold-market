@@ -3,7 +3,6 @@ package com.ryuneng.goldresource.domain.product.controller;
 import com.ryuneng.goldresource.domain.product.dto.ProductListResponse;
 import com.ryuneng.goldresource.domain.product.service.ProductService;
 import com.ryuneng.goldresource.global.exception.CustomException;
-import com.ryuneng.goldresource.global.exception.ErrorCode;
 import com.ryuneng.goldresource.global.exception.response.SuccessResponse;
 import com.ryuneng.goldresource.grpc.AuthServiceClient;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static com.ryuneng.goldresource.global.exception.ErrorCode.UNKNOWN_USER;
 
 @RestController
 @RequestMapping("/api/products")
@@ -31,7 +32,7 @@ public class ProductController {
 
         // 검증되지 않은 사용자 예외처리
         if (!authServiceClient.authenticateUser(accessToken).success()) {
-            throw new CustomException(ErrorCode.UNKNOWN_USER);
+            throw new CustomException(UNKNOWN_USER);
         }
 
         return SuccessResponse.ok("상품 목록 조회 성공", productService.getProducts());
