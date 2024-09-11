@@ -28,4 +28,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable);
+
+    // 주문 상세 조회
+    @Query("SELECT o FROM Order o WHERE o.userEmail = :userEmail AND o.id = :orderId")
+    Order findByIdAndUserEmail(String userEmail, Long orderId);
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 @Schema(description = "주문 생성 응답 DTO")
-public class OrderCreateResponse {
+public class OrderResponse {
 
     @Schema(description = "주문 ID", example = "100000")
     private Long id;

@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.ryuneng.goldresource.global.exception.ErrorCode.ORDER_NOT_FOUND;
 import static com.ryuneng.goldresource.global.exception.ErrorCode.PRODUCT_NOT_FOUND;
 
 @Service
@@ -35,7 +36,7 @@ public class OrderService {
      * @param request 생성할 주문 정보
      * @return 생성된 신규 주문 정보
      */
-    public OrderCreateResponse createOrder(UserResponse user, OrderCreateRequest request) {
+    public OrderResponse createOrder(UserResponse user, OrderCreateRequest request) {
 
         // 주문할 상품 조회
         Product product = productRepository.findById(request.getProductId())
@@ -75,20 +76,7 @@ public class OrderService {
         orderRepository.save(savedOrder);
 
         // 주문 생성 결과를 담아 응답 객체 반환
-        return OrderCreateResponse.builder()
-                .id(savedOrder.getId())
-                .orderNumber(savedOrder.getOrderNumber())
-                .userEmail(savedOrder.getUserEmail())
-                .productId(savedOrder.getProduct().getId())
-                .productName(savedOrder.getProduct().getName().getDescription())
-                .productType(savedOrder.getProduct().getType().getDescription())
-                .productPrice(savedOrder.getProduct().getPrice())
-                .quantity(savedOrder.getQuantity())
-                .totalPrice(savedOrder.getTotalPrice())
-                .status(savedOrder.getStatus().getDescription())
-                .deliveryAddress(savedOrder.getDeliveryAddress())
-                .createdAt(savedOrder.getCreatedAt())
-                .build();
+        return getOrderResponse(savedOrder);
     }
 
     /**
@@ -98,7 +86,7 @@ public class OrderService {
      * @param request 페이지 요청 정보
      * @return 페이징 처리된 주문 목록
      */
-    public Page<OrderListResponse> getOrders(UserResponse user, OrderPageRequest request) {
+    public Page<OrderListResponse> getOrders(UserResponse user, OrderListRequest request) {
 
         // 시작일과 종료일을 LocalDateTime으로 변환
         LocalDateTime startDateTime = request.getStartDate().atStartOfDay();
@@ -130,6 +118,59 @@ public class OrderService {
         }
 
         // 주문 목록을 응답 DTO로 변환하여 반환
+        return getOrderListResponses(orders);
+    }
+
+    /**
+     * 주문 상세 조회
+     *
+     * @param user 검증된 사용자 정보
+     * @param orderId 주문 ID
+     * @return 주문 상세 정보
+     */
+    public OrderResponse getOrderDetail(UserResponse user, Long orderId) {
+
+        Order order = orderRepository.findByIdAndUserEmail(user.email(), orderId);
+
+        if (order == null) {
+            throw new CustomException(ORDER_NOT_FOUND);
+        }
+
+        return getOrderResponse(order);
+    }
+
+    /**
+     * 주문 엔티티를 기반으로 OrderResponse 객체를 생성하는 메서드
+     *
+     * @param order 조회된 주문 엔티티
+     * @return 주문 정보가 담긴 OrderResponse 객체
+     */
+    private OrderResponse getOrderResponse(Order order) {
+
+        return OrderResponse.builder()
+                .id(order.getId())
+                .orderNumber(order.getOrderNumber())
+                .userEmail(order.getUserEmail())
+                .productId(order.getProduct().getId())
+                .productName(order.getProduct().getName().getDescription())
+                .productType(order.getProduct().getType().getDescription())
+                .productPrice(order.getProduct().getPrice())
+                .quantity(order.getQuantity())
+                .totalPrice(order.getTotalPrice())
+                .status(order.getStatus().getDescription())
+                .deliveryAddress(order.getDeliveryAddress())
+                .createdAt(order.getCreatedAt())
+                .build();
+    }
+
+    /**
+     * 주문 엔티티의 페이지를 OrderListResponse 객체의 페이지로 변환하는 메서드
+     *
+     * @param orders 변환할 주문 엔티티 페이지
+     * @return 변환된 OrderListResponse 객체 페이지
+     */
+    private static Page<OrderListResponse> getOrderListResponses(Page<Order> orders) {
+
         return orders.map(order -> OrderListResponse.builder()
                 .orderNumber(order.getOrderNumber())
                 .userEmail(order.getUserEmail())
