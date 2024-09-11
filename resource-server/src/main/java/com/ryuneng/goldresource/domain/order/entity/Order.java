@@ -30,8 +30,8 @@ public class Order extends BaseEntity {
     private String orderNumber;
 
     @Column(nullable = false)
-    @Comment("주문자 ID")
-    private Long userId;
+    @Comment("주문자 이메일")
+    private String userEmail;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
@@ -53,5 +53,4 @@ public class Order extends BaseEntity {
 
     @Comment("배송지")
     private String deliveryAddress;
-
 }
