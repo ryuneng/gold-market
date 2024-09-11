@@ -18,4 +18,5 @@ message AuthRequest { // 요청 객체
 message AuthResponse { // 응답 객체
   bool success = 1;
   string email = 2;
+  string role = 3;
 }

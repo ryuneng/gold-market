@@ -35,10 +35,12 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase { // gR
             // 인증 성공 응답 생성
             AuthResponse response = AuthResponse.newBuilder()
                     .setSuccess(true)
-                    .setEmail(userDetails.getUsername()) // 이메일 반환
+                    .setEmail(userDetails.getUsername())              // 이메일 반환
+                    .setRole(userDetails.getAuthorities().toString()) // 권한 반환
                     .build();
 
-            log.info("자원 서버로 전송할 gRPC 통신 성공 응답 success: {}, email: {}", response.getSuccess(), response.getEmail());
+            log.info("자원 서버로 전송할 gRPC 통신 성공 응답 success: {}, email: {}, role: {}",
+                    response.getSuccess(), response.getEmail(), response.getRole());
 
             // 응답 전송
             responseObserver.onNext(response);

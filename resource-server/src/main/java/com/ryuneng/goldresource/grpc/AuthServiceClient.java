@@ -31,15 +31,15 @@ public class AuthServiceClient {
                     AuthRequest.newBuilder()
                             .setAccessToken(accessToken)
                             .build());
-            log.info("gRPC 통신 응답 success: {}, email: {}", response.getSuccess(), response.getEmail());
+            log.info("gRPC 통신 응답 success: {}, email: {}, role: {}", response.getSuccess(), response.getEmail(), response.getRole());
 
             // 응답 결과를 UserResponse 객체로 변환하여 반환
-            return new UserResponse(response.getSuccess(), response.getEmail());
+            return new UserResponse(response.getSuccess(), response.getEmail(), response.getRole());
         } catch (StatusRuntimeException e) {
             // gRPC 호출 실패 시 오류 메시지 기록
             log.info("gRPC 호출 실패 : {}", e.getStatus().getCode().name());
             // 인증 실패 응답 반환
-            return new UserResponse(false, "Unknown");
+            return new UserResponse(false, "email: Unknown", "role: none");
         }
     }
 }
