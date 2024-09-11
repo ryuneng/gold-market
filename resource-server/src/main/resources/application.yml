@@ -35,8 +35,6 @@ spring:
       mode: always # 서버 실행 시 data.sql 파일 항상 실행
 
 grpc:
-  server:
-    port: ${GRPC_PORT_RESOURCE}
   client:
     auth:
       address: ${DB_HOST}:${GRPC_PORT}
