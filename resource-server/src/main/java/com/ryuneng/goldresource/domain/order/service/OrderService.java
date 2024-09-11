@@ -14,13 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 
-import static com.ryuneng.goldresource.global.exception.ErrorCode.ORDER_NOT_FOUND;
-import static com.ryuneng.goldresource.global.exception.ErrorCode.PRODUCT_NOT_FOUND;
+import static com.ryuneng.goldresource.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,7 @@ public class OrderService {
      * @param request 생성할 주문 정보
      * @return 생성된 신규 주문 정보
      */
+    @Transactional
     public OrderResponse createOrder(UserResponse user, OrderCreateRequest request) {
 
         // 주문할 상품 조회
@@ -86,6 +88,7 @@ public class OrderService {
      * @param request 페이지 요청 정보
      * @return 페이징 처리된 주문 목록
      */
+    @Transactional(readOnly = true)
     public Page<OrderListResponse> getOrders(UserResponse user, OrderListRequest request) {
 
         // 시작일과 종료일을 LocalDateTime으로 변환
@@ -128,6 +131,7 @@ public class OrderService {
      * @param orderId 주문 ID
      * @return 주문 상세 정보
      */
+    @Transactional(readOnly = true)
     public OrderResponse getOrderDetail(UserResponse user, Long orderId) {
 
         Order order = orderRepository.findByIdAndUserEmail(user.email(), orderId);
@@ -137,6 +141,33 @@ public class OrderService {
         }
 
         return getOrderResponse(order);
+    }
+
+
+    /**
+     * 주문 상태 변경
+     * 
+     * @param user 검증된 사용자 정보
+     * @param orderId 주문 ID
+     */
+    @Transactional
+    public void updateOrderStatus(UserResponse user, Long orderId, String status) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomException(ORDER_NOT_FOUND));
+
+        // 권한 문자열에서 대괄호 제거 및 공백 제거
+        String roleString = user.role().replaceAll("[\\[\\] ]", "");
+        // 권한 문자열을 쉼표로 분리하여 배열로 변환
+        String[] roles = roleString.split(",");
+
+        // USER 권한을 가진 사용자는 주문 상태 변경 접근 권한 없음
+        if (Arrays.asList(roles).contains("USER")) {
+            throw new CustomException(UNAUTHORIZED_USER);
+        }
+
+        order.updateStatus(Status.valueOf(status));
+        orderRepository.save(order);
     }
 
     /**

@@ -59,4 +59,10 @@ public class Order extends BaseEntity {
 
         this.orderNumber = orderNumber;
     }
+
+    // 주문상태 업데이트
+    public void updateStatus(Status status) {
+
+        this.status = status;
+    }
 }
