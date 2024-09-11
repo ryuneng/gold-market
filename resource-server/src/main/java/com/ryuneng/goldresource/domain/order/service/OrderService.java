@@ -76,20 +76,7 @@ public class OrderService {
         orderRepository.save(savedOrder);
 
         // 주문 생성 결과를 담아 응답 객체 반환
-        return OrderResponse.builder()
-                .id(savedOrder.getId())
-                .orderNumber(savedOrder.getOrderNumber())
-                .userEmail(savedOrder.getUserEmail())
-                .productId(savedOrder.getProduct().getId())
-                .productName(savedOrder.getProduct().getName().getDescription())
-                .productType(savedOrder.getProduct().getType().getDescription())
-                .productPrice(savedOrder.getProduct().getPrice())
-                .quantity(savedOrder.getQuantity())
-                .totalPrice(savedOrder.getTotalPrice())
-                .status(savedOrder.getStatus().getDescription())
-                .deliveryAddress(savedOrder.getDeliveryAddress())
-                .createdAt(savedOrder.getCreatedAt())
-                .build();
+        return getOrderResponse(savedOrder);
     }
 
     /**
@@ -131,17 +118,7 @@ public class OrderService {
         }
 
         // 주문 목록을 응답 DTO로 변환하여 반환
-        return orders.map(order -> OrderListResponse.builder()
-                .orderNumber(order.getOrderNumber())
-                .userEmail(order.getUserEmail())
-                .productName(order.getProduct().getName().getDescription())
-                .productType(order.getProduct().getType().getDescription())
-                .productPrice(order.getProduct().getPrice())
-                .quantity(order.getQuantity())
-                .totalPrice(order.getTotalPrice())
-                .status(order.getStatus().getDescription())
-                .createdAt(order.getCreatedAt())
-                .build());
+        return getOrderListResponses(orders);
     }
 
     /**
@@ -159,6 +136,17 @@ public class OrderService {
             throw new CustomException(ORDER_NOT_FOUND);
         }
 
+        return getOrderResponse(order);
+    }
+
+    /**
+     * 주문 엔티티를 기반으로 OrderResponse 객체를 생성하는 메서드
+     *
+     * @param order 조회된 주문 엔티티
+     * @return 주문 정보가 담긴 OrderResponse 객체
+     */
+    private OrderResponse getOrderResponse(Order order) {
+
         return OrderResponse.builder()
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
@@ -173,5 +161,26 @@ public class OrderService {
                 .deliveryAddress(order.getDeliveryAddress())
                 .createdAt(order.getCreatedAt())
                 .build();
+    }
+
+    /**
+     * 주문 엔티티의 페이지를 OrderListResponse 객체의 페이지로 변환하는 메서드
+     *
+     * @param orders 변환할 주문 엔티티 페이지
+     * @return 변환된 OrderListResponse 객체 페이지
+     */
+    private static Page<OrderListResponse> getOrderListResponses(Page<Order> orders) {
+
+        return orders.map(order -> OrderListResponse.builder()
+                .orderNumber(order.getOrderNumber())
+                .userEmail(order.getUserEmail())
+                .productName(order.getProduct().getName().getDescription())
+                .productType(order.getProduct().getType().getDescription())
+                .productPrice(order.getProduct().getPrice())
+                .quantity(order.getQuantity())
+                .totalPrice(order.getTotalPrice())
+                .status(order.getStatus().getDescription())
+                .createdAt(order.getCreatedAt())
+                .build());
     }
 }
