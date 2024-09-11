@@ -8,7 +8,8 @@ public enum ErrorCode {
 
     UNKNOWN_USER(HttpStatus.BAD_REQUEST, "검증되지 않은 사용자입니다."),
     PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다."),
-    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다.");
+    ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."),
+    UNAUTHORIZED_USER(HttpStatus.FORBIDDEN, "주문 상태는 관리자와 매니저만 변경할 수 있습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

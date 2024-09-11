@@ -66,6 +66,18 @@ public class OrderController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @Operation(summary = "주문 상태 변경", description = "인증 서버를 통해 사용자 검증 후 권한을 가진 사용자가 주문 상태를 변경합니다.")
+    @PutMapping("/{orderId}/{status}")
+    public HttpStatus updateOrderStatus(@RequestHeader("Authorization") String accessToken,
+                                        @PathVariable Long orderId, @PathVariable String status) {
+
+        UserResponse user = validateUser(accessToken); // 사용자 검증
+
+        orderService.updateOrderStatus(user, orderId, status);
+
+        return HttpStatus.NO_CONTENT;
+    }
+
     // 주어진 액세스 토큰을 통해 사용자 인증을 수행하는 메서드
     private UserResponse validateUser(String accessToken) {
 
