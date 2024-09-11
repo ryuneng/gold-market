@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Schema(description = "주문 목록 요청 DTO")
-public class OrderPageRequest {
+public class OrderListRequest {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Schema(description = "조회 시작일", example = "2024-09-01")

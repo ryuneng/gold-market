@@ -35,7 +35,7 @@ public class OrderService {
      * @param request 생성할 주문 정보
      * @return 생성된 신규 주문 정보
      */
-    public OrderCreateResponse createOrder(UserResponse user, OrderCreateRequest request) {
+    public OrderResponse createOrder(UserResponse user, OrderCreateRequest request) {
 
         // 주문할 상품 조회
         Product product = productRepository.findById(request.getProductId())
@@ -75,7 +75,7 @@ public class OrderService {
         orderRepository.save(savedOrder);
 
         // 주문 생성 결과를 담아 응답 객체 반환
-        return OrderCreateResponse.builder()
+        return OrderResponse.builder()
                 .id(savedOrder.getId())
                 .orderNumber(savedOrder.getOrderNumber())
                 .userEmail(savedOrder.getUserEmail())
@@ -98,7 +98,7 @@ public class OrderService {
      * @param request 페이지 요청 정보
      * @return 페이징 처리된 주문 목록
      */
-    public Page<OrderListResponse> getOrders(UserResponse user, OrderPageRequest request) {
+    public Page<OrderListResponse> getOrders(UserResponse user, OrderListRequest request) {
 
         // 시작일과 종료일을 LocalDateTime으로 변환
         LocalDateTime startDateTime = request.getStartDate().atStartOfDay();
