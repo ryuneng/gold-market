@@ -5,6 +5,7 @@ import com.ryuneng.goldresource.domain.product.entity.Product;
 import com.ryuneng.goldresource.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ public class ProductService {
      *
      * @return 모든 상품 목록
      */
+    @Transactional(readOnly = true)
     public List<ProductListResponse> getProducts() {
 
         List<Product> products = productRepository.findAll();
