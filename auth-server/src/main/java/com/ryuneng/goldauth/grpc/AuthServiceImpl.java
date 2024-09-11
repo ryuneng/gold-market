@@ -7,10 +7,12 @@ import com.ryuneng.goldmarket.grpc.AuthResponse;
 import com.ryuneng.goldmarket.grpc.AuthServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.security.core.userdetails.UserDetails;
 
 // gRPC 통신을 통해 자원 서버의 요청을 처리하는 서비스
+@Slf4j
 @GrpcService
 @RequiredArgsConstructor
 public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase { // gRPC 통신을 위한 인터페이스는 proto 파일을 통해 자동 생성됨
@@ -35,6 +37,8 @@ public class AuthServiceImpl extends AuthServiceGrpc.AuthServiceImplBase { // gR
                     .setSuccess(true)
                     .setEmail(userDetails.getUsername()) // 이메일 반환
                     .build();
+
+            log.info("자원 서버로 전송할 gRPC 통신 성공 응답 success: {}, email: {}", response.getSuccess(), response.getEmail());
 
             // 응답 전송
             responseObserver.onNext(response);

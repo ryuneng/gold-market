@@ -31,6 +31,7 @@ public class AuthServiceClient {
                     AuthRequest.newBuilder()
                             .setAccessToken(accessToken)
                             .build());
+            log.info("gRPC 통신 응답 success: {}, email: {}", response.getSuccess(), response.getEmail());
 
             // 응답 결과를 UserResponse 객체로 변환하여 반환
             return new UserResponse(response.getSuccess(), response.getEmail());
