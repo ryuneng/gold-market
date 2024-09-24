@@ -1,37 +1,38 @@
 # 🪙 GoldMarket
 
-> ## 📝 목차
-> 1. [서비스 소개](#서비스-소개)
-> 2. [Quick Start](#quick-start)
-> 3. [프로젝트 일정](#프로젝트-일정)
-> 4. [프로젝트 환경](#%EF%B8%8F-프로젝트-환경)
-> 6. [API 명세서 및 ERD](#api-명세서-및-erd)
-> 7. [트러블 슈팅](#트러블-슈팅)
-> 8. [고민한 흔적](#고민한-흔적)
-> 9. [디렉토리 구조](#디렉토리-구조)
+## 🔍 목차
+1. [서비스 소개](#-서비스-소개)
+2. [Quick Start](#-quick-start)
+3. [프로젝트 환경](#%EF%B8%8F-프로젝트-환경)
+4. [API 명세서 및 ERD](#-api-명세서-및-erd)
+5. [트러블 슈팅](#-트러블-슈팅)
+6. [고민한 흔적](#-고민한-흔적)
+7. [디렉토리 구조](#%EF%B8%8F-디렉토리-구조)
 
 <br>
 
-## 서비스 소개
-- **금 거래 활성화 서비스** : 금의 판매와 구매를 지원하는 서비스를 제공하여 금 거래의 활성화를 촉진합니다.
+## 📋 서비스 소개
+사용자가 진열된 금 상품을 판매하거나 구매할 수 있는 **금 거래소 웹 서비스**입니다.<br>
+> 서비스 확장을 고려해 `MSA 아키텍처`를 적용하여 인증 서버와 자원 서버를 분리하였으며,<br>`gRPC 통신`을 사용해 자원 서버의 사용자 인증 API를 구현하였습니다.
 
 <br>
 
 ### 주요 기능
-> 1. 유저는 회원가입하고, 로그인할 수 있습니다.
-> 2. 상품 목록을 조회합니다.
-> 3. 주문을 생성합니다.
-> 4. 주문 목록을 조회합니다.
-> 5. 주문 상세를 조회합니다.
-> 6. 권한을 가진 사용자가 주문 상태를 변경합니다.
+1. 유저는 회원가입하고, 로그인할 수 있습니다.
+2. 상품 목록을 조회합니다.
+3. 주문을 생성합니다.
+4. 주문 목록을 조회합니다.
+5. 주문 상세를 조회합니다.
+6. 권한을 가진 사용자가 주문 상태를 변경합니다.
 
 <br>
+<br>
 
-## Quick Start
-### 1. 사전 준비 사항
+## ✅ Quick Start
+#### 1. 사전 준비 사항
 - Docker 및 Docker Composer가 설치되어 있어야 합니다. (버전 20.10 이상 권장)
 
-### 2. 데이터베이스 실행
+#### 2. 데이터베이스 실행
 - 애플리케이션을 시작하기 전에 데이터베이스를 Docker Compose를 사용하여 설정해야 합니다.
 다음 명령어를 사용하여 각 서버의 데이터베이스를 실행합니다.
 ```
@@ -41,7 +42,7 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 위 명령어는 백그라운드에서 데이터베이스 컨테이너를 실행합니다.
 실행 중인 상태를 확인하려면 docker ps 명령어를 사용하세요.
 
-### 3. Redis 패스워드 설정
+#### 3. Redis 패스워드 설정
 ```
 1) docker exec -it [CONTAINER ID] redis-cli
   (위 명령어가 실행되지 않을 경우, 아래 명령어를 실행해주세요.)
@@ -56,14 +57,10 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 ```
 
 <br>
-<br>
-
-### 프로젝트 일정
-- 2024.09.04 - 2024.09.11
 
 <br>
 
-### 🛠️ 프로젝트 환경
+## 🛠️ 프로젝트 환경
 | Stack                                                                                                        | Version           |
 |:------------------------------------------------------------------------------------------------------------:|:-----------------:|
 | ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) | Spring Boot 3.3.3 |
@@ -74,7 +71,7 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 
 <br>
 
-### API 명세서 및 ERD
+## 📄 API 명세서 및 ERD
 <details>
   <summary><b>🧾 API 명세서</b></summary><br>
   🔗<a href="https://documenter.getpostman.com/view/33600354/2sAXqmB5nZ"> POSTMAN API 명세 링크 클릭</a>
@@ -97,10 +94,10 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 
 <br>
 
-### 트러블 슈팅
+## 💥 트러블 슈팅
 <details>
-  <summary><b>gRPC 설정 과정에서 발생한 오류</b></summary>
-<h3>💥 문제</h3>
+  <summary>gRPC 설정 과정에서 발생한 오류</summary>
+<h3>⚠️ 문제</h3>
 
 - gRPC 설정 과정에서 <b>gRPC 관련 클래스들이 생성되지 않고</b> 오류가 발생했다.
 - <details>
@@ -137,7 +134,7 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 
 <br>
 
-<h3>💥 + 2차 문제</h3>
+<h3>⚠️ + 2차 문제</h3>
 
 - <b>문제</b> : 생성된 gRPC 관련 클래스들이 정상적으로 <b>import되지 않는</b> 또 다른 문제가 발생했다.<br>
 - <b>과정</b> : 여러 참고 자료를 찾아 수정해봤지만, 문제는 해결되지 않았다. gRPC 관련 자료가 많지 않아 해결에 어려움이 있었다.<br>
@@ -148,8 +145,8 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 </details>
 
 <details>
-  <summary><b>자원 서버의 gRPC 포트가 9090으로 실행되는 문제</b></summary>
-<h3>💥 문제</h3>
+  <summary>자원 서버의 gRPC 포트가 9090으로 실행되는 문제</summary>
+<h3>⚠️ 문제</h3>
 
 - 자원 서버의 `application.yml`에 gprc client port를 50052로 설정했음에도 불구하고, 서버를 실행할 때마다 <b>gRPC 포트가 `9090`으로 실행</b>되었다.
 이로 인해 <b>인증 서버와 자원 서버 간의 통신이 실패</b>했다.
@@ -198,8 +195,8 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 </details>
 
 <details>
-  <summary><b>gRPC 의존성 추가 과정에서 테스트 전용 프로파일로 인해 발생한 오류</b></summary>
-<h3>💥 문제</h3>
+  <summary>gRPC 의존성 추가 과정에서 테스트 전용 프로파일로 인해 발생한 오류</summary>
+<h3>⚠️ 문제</h3>
 
 - 인증 서버에 gRPC 의존성을 추가한 후 서버 실행 시 여러 오류가 발생했고, **실제로는 정상적으로 통과되는 테스트도 실패**했다는 메시지가 출력되었다.
 - <details>
@@ -245,8 +242,8 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 </details>
 
 <details>
-  <summary><b>JWT_SECRET_KEY 환경변수 설정 문제</b></summary>
-<h3>💥 문제</h3>
+  <summary>JWT_SECRET_KEY 환경변수 설정 문제</summary>
+<h3>⚠️ 문제</h3>
 
 - JWT 기반 로그인을 구현하는 과정에서 `@Value("${JWT_SECRET_KEY}")`를 통해 환경변수에 설정된 **`JWT_SECRET_KEY` 값을 읽어오지 못하는 문제**가 발생했다.
 `application.yml`과 `.env` 파일에 각각 같은 환경변수를 설정했음에도 충돌이 발생했다.
@@ -286,8 +283,8 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 </details>
 
 <details>
-  <summary><b>POST 요청 성공 시 응답코드로 설정한 201 CREATED가 아닌 200 OK로 반환되는 문제</b></summary>
-<h3>💥 문제</h3>
+  <summary>POST 요청 성공 시 응답코드로 설정한 201 CREATED가 아닌 200 OK로 반환되는 문제</summary>
+<h3>⚠️ 문제</h3>
 
 - `@PostMapping` 요청 성공 시 반환값으로 `SuccessResponse.created()`를 사용했는데,
 실제 응답은 **`201 CREATED`가 아닌 `200 OK`가 반환**되었다.
@@ -324,10 +321,10 @@ Spring은 기본적으로 **`ResponseEntity`를 사용하지 않으면 HTTP 상�
 
 <br>
 
-### 고민한 흔적
+## 🤔 고민한 흔적
 <details>
-  <summary><b>JPA Auditing을 활용한 엔티티 생성 및 수정 시간 관리를 위한 Base 클래스 선택 과정</b></summary>
-<h3>🤔 고민한 내용</h3>
+  <summary>JPA Auditing을 활용한 엔티티 생성 및 수정 시간 관리를 위한 Base 클래스 선택 과정</summary>
+<h3>🖼️ 고민한 내용</h3>
 
 - 각 도메인 엔티티 클래스를 생성하는 과정에서 생성 및 수정 시간을 자동으로 관리해주는 `BaseEntity`, `BaseTimeEntity`, `Timestamped` 중 어떤 클래스를 사용할지 고민했다.
 
@@ -356,8 +353,8 @@ Spring은 기본적으로 **`ResponseEntity`를 사용하지 않으면 HTTP 상�
 </details>
 
 <details>
-  <summary><b>테스트용 데이터베이스 분리</b></summary>
-<h3>🤔 고민한 내용</h3>
+  <summary>테스트용 데이터베이스 분리</summary>
+<h3>🖼️ 고민한 내용</h3>
 
 - 로컬 환경과 테스트 환경을 분리하면서, **테스트 시 로컬에서 사용하는 실제 DB와 동일한 데이터베이스를 사용할 것인지**에 대해 고민했다.
 
@@ -381,12 +378,14 @@ Spring은 기본적으로 **`ResponseEntity`를 사용하지 않으면 HTTP 상�
 
 <br>
 
-### 디렉토리 구조
-- 직관적인 구조 파악과 관리를 위해 <b>도메인형 구조</b>를 채택하였습니다.
-<h4>인증서버</h4>
+## 🗂️ 디렉토리 구조
+직관적인 구조 파악과 관리를 위해 <b>도메인형 구조</b>를 채택하였습니다.
 
+<details>
+  <summary><b>인증 서버 (auth-server)</b></summary>
+  
 ```
-  ├─main
+├─main
 │  ├─java
 │  │  └─com
 │  │      └─ryuneng
@@ -423,8 +422,9 @@ Spring은 기본적으로 **`ResponseEntity`를 사용하지 않으면 HTTP 상�
 ```
 
 <br>
-
-<h4>자원서버</h4>
+</details>
+<details>
+  <summary><b>자원 서버 (resource-server)</b></summary>
 
 ```
 ├─main
@@ -465,3 +465,4 @@ Spring은 기본적으로 **`ResponseEntity`를 사용하지 않으면 HTTP 상�
             └─ryuneng
                 └─goldresource
 ```
+</details>
