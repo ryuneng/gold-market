@@ -5,9 +5,11 @@
 2. [Quick Start](#-quick-start)
 3. [프로젝트 환경](#%EF%B8%8F-프로젝트-환경)
 4. [API 명세서 및 ERD](#-api-명세서-및-erd)
-5. [트러블 슈팅](#-트러블-슈팅)
-6. [고민한 흔적](#-고민한-흔적)
-7. [디렉토리 구조](#%EF%B8%8F-디렉토리-구조)
+5. [컨벤션 전략](#-컨벤션-전략)
+6. [GitHub Issue, PR을 통한 트래킹 관리](#%EF%B8%8F-github-issue-pr을-통한-트래킹-관리)
+7. [트러블 슈팅](#-트러블-슈팅)
+8. [고민한 흔적](#-고민한-흔적)
+9. [디렉토리 구조](#%EF%B8%8F-디렉토리-구조)
 
 <br>
 
@@ -58,8 +60,6 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 
 <br>
 
-<br>
-
 ## 🛠️ 프로젝트 환경
 | Stack                                                                                                        | Version           |
 |:------------------------------------------------------------------------------------------------------------:|:-----------------:|
@@ -80,7 +80,6 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
   <img src="https://github.com/user-attachments/assets/ec11004c-4bd3-4c21-8956-e36c674ce983" width="80%">
   <h4>자원서버</h4>
   <img src="https://github.com/user-attachments/assets/17bf7813-fb3a-46d4-839f-ca1807809131" width="80%">
-
 </details>
 
 <details>
@@ -90,6 +89,42 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
   <img src="https://github.com/user-attachments/assets/4bb00055-0980-4666-a027-b19d0c324183" width="70%">
   <h4>자원서버</h4>
   <img src="https://github.com/user-attachments/assets/120855c4-d430-41ee-a405-3cd3ca1cee88" width="70%">
+</details>
+
+<br>
+
+## 🚩 컨벤션 전략
+**1. 브랜치 전략**
+| Commit Type | Description                      |
+|:-----------:|:--------------------------------:|
+| Feat        | 새로운 기능 추가                  |
+| Fix         | 오류 및 문제 해결                 |
+| Test        | 테스트 코드 추가                  |
+| Refactor    | 코드 리팩토링                     |
+| Style       | 코드 스타일 변경                  |
+| Chore       | 빌드 업무 수정, 패키지 매니저 수정 |
+| Docs        | 문서 수정, 주석 추가              |
+
+**2. 코딩 컨벤션**
+| Type            | Description                 |
+|:---------------:|:---------------------------:|
+| 변수명           | 카멜 케이스 (camelCase)     |
+| 파일명 & 클래스명 | 파스칼 케이스 (PascalCase)  |
+| DB 테이블명      | 스네이크 케이스 (snake_case) |
+| API 응답 필드명  | 카멜 케이스 (camelCase)     |
+| DTO 네이밍       | ~Request / ~Response       |
+
+<br>
+
+## 🏃🏻‍➡️ GitHub Issue, PR을 통한 트래킹 관리
+<details>
+  <summary><b>Issues</b></summary><br>
+  <img src="https://github.com/user-attachments/assets/39c20507-b2c7-4c64-ac25-a10dfb2743a3" width="80%">
+</details>
+<details>
+  <summary><b>Pull requests</b></summary><br>
+  <img src="https://github.com/user-attachments/assets/9d1998fc-1403-42f7-b09d-3470056fe16c" width="80%">
+
 </details>
 
 <br>
