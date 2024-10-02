@@ -21,7 +21,7 @@ public class SwaggerConfig {
 
         return new Info()
                 .title("GoldMarket API Documentation: Authorization Server")
-                .description("금방주식회사 백엔드 입사과제 API 문서: 인증 서버 [원티드 프리온보딩 백엔드 인턴십]")
+                .description("골드마켓 API 문서: 인증 서버")
                 .version("1.0");
     }
 }

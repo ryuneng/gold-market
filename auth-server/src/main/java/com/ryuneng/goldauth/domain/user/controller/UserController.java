@@ -6,6 +6,8 @@ import com.ryuneng.goldauth.domain.user.dto.UserCreateRequest;
 import com.ryuneng.goldauth.domain.user.dto.UserCreateResponse;
 import com.ryuneng.goldauth.domain.user.service.UserService;
 import com.ryuneng.goldauth.global.exception.response.SuccessResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -18,11 +20,13 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@Tag(name = "User", description = "사용자 API")
 public class UserController {
 
     private final UserService userService;
     private final TokenProvider tokenProvider;
 
+    @Operation(summary = "회원가입", description = "신규 사용자를 등록합니다.")
     @PostMapping
     public ResponseEntity<SuccessResponse<UserCreateResponse>> signup(@Valid @RequestBody UserCreateRequest request) {
 
@@ -30,6 +34,7 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "로그인", description = "로그인 요청을 처리한 후, JWT Access Token 및 Refresh Token을 발급하여 반환합니다.")
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@Valid @RequestBody LoginRequest request) {
 
@@ -41,6 +46,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(tokens);
     }
 
+    @Operation(summary = "AccessToken 재발급", description = "Refresh Token 유효성 검증 후 새로운 AccessToken을 발급합니다.")
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String refreshToken) {
         String email = tokenProvider.getEmailFromToken(refreshToken);
