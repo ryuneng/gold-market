@@ -77,9 +77,9 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
   🔗<a href="https://documenter.getpostman.com/view/33600354/2sAXqmB5nZ"> POSTMAN API 명세 링크 클릭</a>
   <br>
   <h4>인증서버</h4>
-  <img src="https://github.com/user-attachments/assets/ec11004c-4bd3-4c21-8956-e36c674ce983" width="80%">
+  <img src="https://github.com/user-attachments/assets/b639a3f3-a6d9-4858-a1ab-b325f53b5dc1" width="80%">
   <h4>자원서버</h4>
-  <img src="https://github.com/user-attachments/assets/17bf7813-fb3a-46d4-839f-ca1807809131" width="80%">
+  <img src="https://github.com/user-attachments/assets/053434ed-e4c9-4baf-98e2-8a767f67c61c" width="80%">
 </details>
 
 <details>
@@ -119,11 +119,11 @@ docker-compose -f ./resource-server/docker-compose.resource.yml up -d
 ## 🏃🏻‍➡️ GitHub Issue, PR을 통한 트래킹 관리
 <details>
   <summary><b>Issues</b></summary><br>
-  <img src="https://github.com/user-attachments/assets/39c20507-b2c7-4c64-ac25-a10dfb2743a3" width="80%">
+  <img src="https://github.com/user-attachments/assets/39c20507-b2c7-4c64-ac25-a10dfb2743a3" width="90%">
 </details>
 <details>
   <summary><b>Pull requests</b></summary><br>
-  <img src="https://github.com/user-attachments/assets/9d1998fc-1403-42f7-b09d-3470056fe16c" width="80%">
+  <img src="https://github.com/user-attachments/assets/9d1998fc-1403-42f7-b09d-3470056fe16c" width="90%">
 
 </details>
 
